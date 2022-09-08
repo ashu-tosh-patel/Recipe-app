@@ -21,7 +21,7 @@ export default function Recipe() {
 
 
 
-        projectFirestore.collection('recipes').doc(id).get().then((doc) => {
+        const unsub = projectFirestore.collection('recipes').doc(id).onSnapshot((doc) => {
             if (doc.exists) {
                 setIsPending(false)
                 setRecipe(doc.data())
@@ -31,7 +31,16 @@ export default function Recipe() {
                 setError('Could not find the recipe')
             }
         })
+        return () => unsub()
     }, [id])
+
+
+    const handleClick = () => {
+        projectFirestore.collection('recipes').doc(id).update({
+            title: 'something different'
+        })
+    }
+
     return (
         <div className={`recipe ${mode}`}>
             {error && <p className="error">{error}</p>}
@@ -43,7 +52,8 @@ export default function Recipe() {
                     <ul>
                         {recipe.ingredients.map(ing => <li key={ing}>{ing}</li>)}
                     </ul>
-                    <p className="mehthod">{recipe.method}</p>
+                    <p className="method">{recipe.method}</p>
+                    <button onClick={handleClick}>Update me</button>
                 </>
             )}
 

@@ -1,5 +1,5 @@
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { projectFirestore } from '../../firebase/config'
 
